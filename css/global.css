@@ -1,0 +1,19 @@
+@charset "utf-8";
+
+/* ヘッダー */
+#header {
+    margin-top: 2rem;
+}
+
+/* フッター */
+#footer {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+/* 連絡先 */
+#address {
+    display: inline-block;
+    font-size: 80%;
+    font-style: normal;
+}
