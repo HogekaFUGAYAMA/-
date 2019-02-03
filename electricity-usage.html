@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="FUGAYAMA Hogeka">
+    <meta name="description" content="友の会は、家族家庭をキーワードに地域・社会と共存し、より良い生活を探求する「婦人之友」愛読者の集まりです。">
+    <title>友の会（婦人之友）</title>
+    <!--
+        Milligram
+        Copyright (c) CJ Patoilo
+        Released under the MIT license
+        https://milligram.io/
+    -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
+    <link rel="stylesheet" href="https://cdn.rawgit.com/necolas/normalize.css/master/normalize.css">
+    <link rel="stylesheet" href="https://cdn.rawgit.com/milligram/milligram/master/dist/milligram.min.css">
+    <!--/ Milligram -->
+    <link rel="stylesheet" href="css/global.css">
+</head>
+<body>
+    <header id="header" class="container">
+        <h1>友の会</h1>
+        <nav>
+            <ol id="breadcrumbs">
+                <li>
+                    <a href="index.html">ホーム</a>
+                </li>
+                <li>電気使用量調べ</li>
+            </ol>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section>
+            <h2>電気使用量調べ</h2>
+            <p>
+                友の会では、毎年2・6・8月に家庭の電気使用量を調べています。
+                また、そこから1日の平均二酸化炭素排出量も算出します。
+            </p>
+            <fieldset>
+                <p class="row">
+                    <label class="column column-25" for="d-from">日付</label>
+                    <input type="date" id="d-from" class="column column-30">
+                    <span class="column column-15">〜</span>
+                    <input type="date" id="d-to" class="column column-30" readonly>
+                </p>
+                <!--
+                <p class="row">
+                    <label class="column column-25" for="t-account">Twitter アカウント</label>
+                    <input type="text" id="t-account" class="column column-75">
+                </p>
+                -->
+            </fieldset>
+            <table>
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>日付</th>
+                        <!-- <th>天気</th> -->
+                        <th>メーター数</th>
+                        <th>使用量</th>
+                    </tr>
+                </thead>
+                <tbody id="eu-tbl"></tbody>
+            </table>
+        </section>
+    </main>
+
+    <footer id="footer" class="container">
+        <small>&copy; FUGAYAMA Hogeka</small>
+        <address id="address">
+            <a href="https://github.com/HogekaFUGAYAMA/fujinnotomo/wiki" target="wiki">https://github.com/HogekaFUGAYAMA/fujinnotomo/wiki</a>
+        </address>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E="
+        crossorigin="anonymous"></script>
+    <script>
+        $(function() {
+            $("#d-from").change(function() {
+                var from = new Date($(this).val());
+                createTabl(from);
+                setDateTo(from);
+            });
+        });
+
+        // 一覧を生成する
+        function createTabl(from) {
+            var tbl = $("#eu-tbl");
+            for (var i = 1; i <= 8; i++) {
+                var row = $("<tr>");
+                // No.
+                var cell = $("<td>").text(i);
+                row.append(cell);
+                // 日付
+                var date = new Date(from.getFullYear(), from.getMonth(), from.getDate() + (i - 1));
+                var y = date.getFullYear();
+                var m = ("00" + (date.getMonth() + 1)).slice(-2);
+                var d = ("00" + date.getDate()).slice(-2);
+                var day = getDateDay(date);
+                cell = $("<td>").text(y + "/" + m + "/" + d + "(" + day + ")");
+                row.append(cell);
+                /*
+                // 天気（Dark Sky APIを使いたい）
+                cell = $("<td>");
+                row.append(cell);
+                */
+                // メーター数
+                var input = $("<input>").attr({
+                    "type": "number",
+                    "step": 0.1,
+                    "val": 0.0,
+                    "class": "meter"
+                });
+                cell = $("<td>").append(input);
+                row.append(cell);
+                // 使用量
+                cell = $("<td>").attr({
+                    "class": "usage"
+                });
+                row.append(cell);
+                tbl.append(row);
+            }
+        }
+
+        // 曜日を取得する
+        function getDateDay(date) {
+            return "日月火水木金土"[date.getDay()];
+        }
+
+        // 日付（to）を設定する
+        function setDateTo(from) {
+            var to = new Date(from.getFullYear(), from.getMonth(), from.getDate() + 7);
+            var y = to.getFullYear();
+            var m = ("00" + (to.getMonth() + 1)).slice(-2);
+            var d = ("00" + to.getDate()).slice(-2);
+            $("#d-to").val(y + "-" + m + "-" + d);
+        }
+    </script>
+</body>
+</html>

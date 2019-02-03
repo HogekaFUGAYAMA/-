@@ -5,6 +5,28 @@
     margin-top: 2rem;
 }
 
+/* パンくずリスト */
+#breadcrumbs > li {
+    display: inline-block;
+}
+
+#breadcrumbs > li:not(:last-child):after {
+    content: ">";
+}
+
+/* メイン */
+.row {
+    align-items: center;
+}
+
+p.row {
+    margin-bottom: 0.5rem;
+}
+
+span.column {
+    text-align: center;
+}
+
 /* フッター */
 #footer {
     margin-bottom: 2rem;
