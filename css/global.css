@@ -27,6 +27,10 @@ span.column {
     text-align: center;
 }
 
+input {
+    margin-bottom: 0;
+}
+
 [type=number] {
     ime-mode: disabled;
 }
