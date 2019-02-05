@@ -49,7 +49,7 @@
                         <input type="date" id="d-to" class="date">
                     </span>
                     <span class="column column-20">
-                        <input type="reset">
+                        <input type="button" id="reset" value="リセット">
                     </span>
                 </form>
                 <!--
@@ -70,6 +70,29 @@
                     </tr>
                 </thead>
                 <tbody id="eu-tbl"></tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="2">ア. 差引（最大値 - 最小値）</th>
+                        <td colspan="2" class="right">
+                            <span id="subtraction"></span>
+                            kWh
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="2">イ. 1日の平均使用量（ア ÷ 記録した日数）</th>
+                        <td colspan="2" class="right">
+                            <span id="average"></span>
+                            kWh
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="2">ウ. 1日平均CO<sub>2</sub>排出量（イ × 0.36kg）</th>
+                        <td colspan="2" class="right">
+                            <span id="co2"></span>
+                            kg
+                        </td>
+                    </tr>
+                </tfoot>
             </table>
         </section>
     </main>
@@ -86,6 +109,9 @@
         crossorigin="anonymous"></script>
     <script>
         $(function() {
+            // 表示をリセットする（画面描画後処理）
+            resetView();
+
             // 日付をもとに一覧を生成する
             $(".date").change(function() {
                 var from, to;
@@ -105,12 +131,25 @@
                 createTabl(from, to);
             });
 
+            // 表示をリセットする
+            $("#reset").click(function() {
+                resetView();
+                return false;
+            });
+
             // メーター数から使用量を算出する
             $(document).on("change", ".meter", function() {
                 calcUsage($(this));
                 calcAveUsage();
             });
         });
+
+        // 表示をリセットする
+        function resetView() {
+            $("#d-from, #d-to").val("");
+            $("#eu-tbl").html("");
+            $("#subtraction, #average, #co2").text("");
+        }
 
         // 一覧を生成する
         function createTabl(from, to) {
@@ -184,7 +223,7 @@
                 var val = $("[data-meter-idx=" + idx + "]").val();
                 var usage = "";
                 if (val.length !== 0) {
-                    var usage = ((currentVal * 10) - (val * 10)) / 10;
+                    var usage = (currentVal * 10 - val * 10) / 10;
                     currentVal = val;
                 }
                 $("[data-usage-idx=" + idx + "]").text(usage);
@@ -193,6 +232,42 @@
 
         // 使用量の平均等を算出する
         function calcAveUsage() {
+            var minVal, maxVal, minIdx, maxIdx;
+            var arr = new Object;
+            $("[data-meter-idx]").each(function() {
+                var elm = $(this);
+                var val = elm.val();
+                var idx = elm.data("meter-idx");
+                console.log("min:" + minVal + ", max:" + maxVal + ", val:" + val);
+                if (val !== "" && val > 0) {
+                    if (minVal === undefined) {
+                        minVal = val;
+                        minIdx = idx;
+                        maxVal = val;
+                        maxIdx = idx;
+                    } else if (Math.min(minVal, val) !== Number(minVal)) {
+                        minVal = val;
+                        minIdx = idx;
+                    } else if (Math.max(maxVal, val) === Number(val)) {
+                        maxVal = val;
+                        maxIdx = idx;
+                    }
+                }
+            });
+
+            // ア. 差引
+            var sub = (maxVal * 10 - minVal * 10) / 10;
+            $("#subtraction").text(sub);
+            // イ. 1日の平均使用量
+            var ave = 0;
+            if (sub !== 0) {
+                var days = maxIdx - minIdx;
+                ave = Math.round(sub / days * 10) / 10;
+            }
+            $("#average").text(ave);
+            // ウ. 1日平均CO2排出量
+            var co2 = ave * 0.36;
+            $("#co2").text(co2);
         }
     </script>
 </body>

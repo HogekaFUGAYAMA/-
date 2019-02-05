@@ -31,6 +31,10 @@ span.column {
     ime-mode: disabled;
 }
 
+.right {
+    text-align: right;
+}
+
 /* フッター */
 #footer {
     margin-bottom: 2rem;
