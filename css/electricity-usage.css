@@ -1,0 +1,13 @@
+@charset "utf-8";
+
+/* スマホ */
+@media (max-width: 40.0rem) {
+
+    /* テーブル フッター */
+    tfoot span {
+        display: inline-block;
+        font-weight: normal;
+        font-size: smaller;
+    }
+
+}
