@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="https://cdn.rawgit.com/milligram/milligram/master/dist/milligram.min.css">
     <!--/ Milligram -->
     <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/electricity-usage.css">
 </head>
 <body>
     <header id="header" class="container">
@@ -40,15 +41,15 @@
             </p>
             <fieldset>
                 <form class="row">
-                    <label class="column column-10" for="d-from">日付</label>
+                    <label class="column column-15" for="d-from">日付</label>
                     <span class="column column-30">
                         <input type="date" id="d-from" class="date">
                     </span>
-                    <span class="column column-10">〜</span>
+                    <span class="column column-5">〜</span>
                     <span class="column column-30">
                         <input type="date" id="d-to" class="date">
                     </span>
-                    <span class="column column-20">
+                    <span class="column">
                         <input type="button" id="reset" value="リセット">
                     </span>
                 </form>
@@ -72,21 +73,33 @@
                 <tbody id="eu-tbl"></tbody>
                 <tfoot>
                     <tr>
-                        <th colspan="2">ア. 差引（最大値 - 最小値）</th>
+                        <th colspan="2">
+                            <span>ア.</span>
+                            <span>差引</span>
+                            <span>（最大値 - 最小値）</span>
+                        </th>
                         <td colspan="2" class="right">
                             <span id="subtraction"></span>
                             kWh
                         </td>
                     </tr>
                     <tr>
-                        <th colspan="2">イ. 1日の平均使用量（ア ÷ 記録した日数）</th>
+                        <th colspan="2">
+                            <span>イ.</span>
+                            <span>1日平均使用量</span>
+                            <span>（ア ÷ 記録日数）</span>
+                        </th>
                         <td colspan="2" class="right">
                             <span id="average"></span>
                             kWh
                         </td>
                     </tr>
                     <tr>
-                        <th colspan="2">ウ. 1日平均CO<sub>2</sub>排出量（イ × 0.36kg）</th>
+                        <th colspan="2">
+                            <span>ウ.</span>
+                            <span>1日平均CO<sub>2</sub>排出量</span>
+                            <span>（イ × 0.36kg）</span>
+                        </th>
                         <td colspan="2" class="right">
                             <span id="co2"></span>
                             kg
