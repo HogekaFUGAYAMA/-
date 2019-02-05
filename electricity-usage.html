@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="FUGAYAMA Hogeka">
+    <meta name="description" content="友の会では、毎年2・6・8月に家庭の電気使用量を調べています。また、そこから1日の平均二酸化炭素排出量も算出します。">
+    <title>電気量調べ | 友の会（婦人之友）</title>
+    <!--
+        Milligram
+        Copyright (c) CJ Patoilo
+        Released under the MIT license
+        https://milligram.io/
+    -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
+    <link rel="stylesheet" href="https://cdn.rawgit.com/necolas/normalize.css/master/normalize.css">
+    <link rel="stylesheet" href="https://cdn.rawgit.com/milligram/milligram/master/dist/milligram.min.css">
+    <!--/ Milligram -->
+    <link rel="stylesheet" href="css/global.css">
+</head>
+<body>
+    <header id="header" class="container">
+        <h1>友の会</h1>
+        <nav>
+            <ol id="breadcrumbs">
+                <li>
+                    <a href="index.html">ホーム</a>
+                </li>
+                <li>電気使用量調べ</li>
+            </ol>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section>
+            <h2>電気使用量調べ</h2>
+            <p>
+                友の会では、毎年2・6・8月に家庭の電気使用量を調べています。
+                また、そこから1日の平均二酸化炭素排出量も算出します。
+            </p>
+            <fieldset>
+                <form class="row">
+                    <label class="column column-10" for="d-from">日付</label>
+                    <span class="column column-30">
+                        <input type="date" id="d-from" class="date">
+                    </span>
+                    <span class="column column-10">〜</span>
+                    <span class="column column-30">
+                        <input type="date" id="d-to" class="date">
+                    </span>
+                    <span class="column column-20">
+                        <input type="button" id="reset" value="リセット">
+                    </span>
+                </form>
+                <!--
+                <p class="row">
+                    <label class="column column-25" for="t-account">Twitter アカウント</label>
+                    <input type="text" id="t-account" class="column column-75">
+                </p>
+                -->
+            </fieldset>
+            <table>
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>日付</th>
+                        <!-- <th>天気</th> -->
+                        <th>メーター数</th>
+                        <th>使用量</th>
+                    </tr>
+                </thead>
+                <tbody id="eu-tbl"></tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="2">ア. 差引（最大値 - 最小値）</th>
+                        <td colspan="2" class="right">
+                            <span id="subtraction"></span>
+                            kWh
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="2">イ. 1日の平均使用量（ア ÷ 記録した日数）</th>
+                        <td colspan="2" class="right">
+                            <span id="average"></span>
+                            kWh
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="2">ウ. 1日平均CO<sub>2</sub>排出量（イ × 0.36kg）</th>
+                        <td colspan="2" class="right">
+                            <span id="co2"></span>
+                            kg
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </section>
+    </main>
+
+    <footer id="footer" class="container">
+        <small>&copy; FUGAYAMA Hogeka</small>
+        <address id="address">
+            <a href="https://github.com/HogekaFUGAYAMA/fujinnotomo/wiki" target="wiki">https://github.com/HogekaFUGAYAMA/fujinnotomo/wiki</a>
+        </address>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E="
+        crossorigin="anonymous"></script>
+    <script src="js/electricity-usage.js"></script>
+</body>
+</html>
