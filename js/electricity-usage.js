@@ -155,6 +155,6 @@ function calcAveUsage() {
     }
     $("#average").text(ave);
     // ウ. 1日平均CO2排出量
-    var co2 = ave * 0.36;
+    var co2 = ave * 10 * 36 / 1000;
     $("#co2").text(co2);
 }
