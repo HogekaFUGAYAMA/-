@@ -1,0 +1,50 @@
+@charset "utf-8";
+
+/* 日付（PC用） */
+time.pc {
+    display: inline;
+}
+
+/* 日付（スマホ用） */
+time.sp {
+    display: none;
+}
+
+/* スマホ用 */
+@media (max-width: 40.0rem) {
+    /* テーブル */
+    table {
+        font-size: smaller;
+    }
+
+    /* テーブル セル */
+    td, th {
+        padding: .6rem .75rem;;
+    }
+
+    /* テーブル ヘッダー */
+    thead th {
+        white-space: nowrap;
+    }
+
+    /* 日付（PC用） */
+    time.pc {
+        display: none;
+    }
+
+    /* 日付（スマホ用） */
+    time.sp {
+        display: inline;
+    }
+
+    /* メーター数 */
+    .meter {
+        padding: .3rem .5rem;
+    }
+
+    /* テーブル フッター */
+    tfoot span {
+        display: inline-block;
+        font-weight: normal;
+    }
+}

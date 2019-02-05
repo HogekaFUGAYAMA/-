@@ -60,7 +60,15 @@ function createTabl(from, to) {
         var m = ("00" + (date.getMonth() + 1)).slice(-2);
         var d = ("00" + date.getDate()).slice(-2);
         var day = "日月火水木金土"[date.getDay()];
-        cell = $("<td>").text(y + "/" + m + "/" + d + "(" + day + ")");
+        var pc = $("<time>").attr({
+            "datetime": y + "-" + m + "-" + d,
+            "class": "pc"
+        }).text(y + "/" + m + "/" + d + "(" + day + ")");
+        var sp = $("<time>").attr({
+            "datetime": y + "-" + m + "-" + d,
+            "class": "sp"
+        }).text(d + " " + day);
+        cell = $("<td>").append(pc).append(sp);
         row.append(cell);
         /*
         // 天気（Dark Sky APIを使いたい）
