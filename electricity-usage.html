@@ -39,12 +39,19 @@
                 また、そこから1日の平均二酸化炭素排出量も算出します。
             </p>
             <fieldset>
-                <p class="row">
-                    <label class="column column-25" for="d-from">日付</label>
-                    <input type="date" id="d-from" class="column column-30">
-                    <span class="column column-15">〜</span>
-                    <input type="date" id="d-to" class="column column-30" readonly>
-                </p>
+                <form class="row">
+                    <label class="column column-10" for="d-from">日付</label>
+                    <span class="column column-30">
+                        <input type="date" id="d-from" class="date">
+                    </span>
+                    <span class="column column-10">〜</span>
+                    <span class="column column-30">
+                        <input type="date" id="d-to" class="date">
+                    </span>
+                    <span class="column column-20">
+                        <input type="reset">
+                    </span>
+                </form>
                 <!--
                 <p class="row">
                     <label class="column column-25" for="t-account">Twitter アカウント</label>
@@ -79,27 +86,51 @@
         crossorigin="anonymous"></script>
     <script>
         $(function() {
-            $("#d-from").change(function() {
-                var from = new Date($(this).val());
-                createTabl(from);
-                setDateTo(from);
+            // 日付をもとに一覧を生成する
+            $(".date").change(function() {
+                var from, to;
+                switch($(this).attr("id")) {
+                    case "d-from":
+                        from = new Date($(this).val());
+                        to = calcDateTo(from);
+                        break;
+                    case "d-to":
+                        from = new Date($("#d-from").val());
+                        to = new Date($(this).val());
+                        break;
+                    default:
+                        // 何もしない
+                        break;
+                }
+                createTabl(from, to);
+            });
+
+            // メーター数から使用量を算出する
+            $(document).on("change", ".meter", function() {
+                calcUsage($(this));
+                calcAveUsage();
             });
         });
 
         // 一覧を生成する
-        function createTabl(from) {
+        function createTabl(from, to) {
             var tbl = $("#eu-tbl");
-            for (var i = 1; i <= 8; i++) {
+            tbl.html("");
+
+            var idx = 0;
+            var date = new Date(from);
+            while(date < to) {
+                date = addDate(from, idx++);
+
                 var row = $("<tr>");
                 // No.
-                var cell = $("<td>").text(i);
+                var cell = $("<td>").text(idx);
                 row.append(cell);
                 // 日付
-                var date = new Date(from.getFullYear(), from.getMonth(), from.getDate() + (i - 1));
                 var y = date.getFullYear();
                 var m = ("00" + (date.getMonth() + 1)).slice(-2);
                 var d = ("00" + date.getDate()).slice(-2);
-                var day = getDateDay(date);
+                var day = "日月火水木金土"[date.getDay()];
                 cell = $("<td>").text(y + "/" + m + "/" + d + "(" + day + ")");
                 row.append(cell);
                 /*
@@ -111,32 +142,57 @@
                 var input = $("<input>").attr({
                     "type": "number",
                     "step": 0.1,
-                    "val": 0.0,
-                    "class": "meter"
+                    "min": 0.0,
+                    "class": "meter",
+                    "data-meter-idx": idx
                 });
                 cell = $("<td>").append(input);
                 row.append(cell);
                 // 使用量
                 cell = $("<td>").attr({
-                    "class": "usage"
+                    "class": "usage",
+                    "data-usage-idx": idx
                 });
                 row.append(cell);
                 tbl.append(row);
             }
         }
 
-        // 曜日を取得する
-        function getDateDay(date) {
-            return "日月火水木金土"[date.getDay()];
-        }
-
-        // 日付（to）を設定する
-        function setDateTo(from) {
-            var to = new Date(from.getFullYear(), from.getMonth(), from.getDate() + 7);
+        // 日付（from）から日付（to）を算出する
+        function calcDateTo(from) {
+            var to = addDate(from, 7);
             var y = to.getFullYear();
             var m = ("00" + (to.getMonth() + 1)).slice(-2);
             var d = ("00" + to.getDate()).slice(-2);
             $("#d-to").val(y + "-" + m + "-" + d);
+            return to;
+        }
+
+        // 日付に日数を足す
+        function addDate(date, addDays) {
+            return new Date(
+                date.getFullYear(), date.getMonth(), date.getDate() + addDays,
+                date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds());
+        }
+
+        // 使用量を算出する
+        function calcUsage(elm) {
+            var idx = elm.data("meter-idx");
+            var currentVal = elm.val();
+
+            while(--idx > 0) {
+                var val = $("[data-meter-idx=" + idx + "]").val();
+                var usage = "";
+                if (val.length !== 0) {
+                    var usage = ((currentVal * 10) - (val * 10)) / 10;
+                    currentVal = val;
+                }
+                $("[data-usage-idx=" + idx + "]").text(usage);
+            }
+        }
+
+        // 使用量の平均等を算出する
+        function calcAveUsage() {
         }
     </script>
 </body>

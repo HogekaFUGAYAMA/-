@@ -27,6 +27,10 @@ span.column {
     text-align: center;
 }
 
+[type=number] {
+    ime-mode: disabled;
+}
+
 /* フッター */
 #footer {
     margin-bottom: 2rem;
